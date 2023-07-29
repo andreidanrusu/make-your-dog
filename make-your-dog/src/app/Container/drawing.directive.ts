@@ -1,41 +1,41 @@
-import { Directive, HostListener, Input, ElementRef, Renderer2 } from '@angular/core';
+import { Directive, HostListener, Input, ElementRef, Renderer2, Host } from '@angular/core';
 
 @Directive({
   selector: '[appDrawing]'
 })
 export class DrawingDirective {
   private ctx: CanvasRenderingContext2D;
+  private isMouseDown:boolean = false;
 
   constructor(private canvasElement: ElementRef, private renderer : Renderer2) {
       this.ctx = canvasElement.nativeElement.getContext('2d');
-   }
+    }
 
 
-  @HostListener('mousedown')
-  onmousedown(){
-    this.drawRectangle(this.canvasElement.nativeElement);
-  }
-  
-  private drawRectangle(canvas:HTMLCanvasElement) {
-    let ctx = canvas.getContext('2d');
-    ctx?.fillRect(0,0,100,100);
-  }
-
-  private draw(canvas:HTMLCanvasElement){
+  @HostListener('mousedown',['$event'])
+  onmousedown(event : MouseEvent){
+    this.isMouseDown = true;
     this.ctx.beginPath();
-    let offsets = this.getOffset(canvas);
-    this.ctx.strokeStyle = `rgb(
-      0,
-      ${Math.floor(255 - 42.5)},
-      ${Math.floor(255 - 42.5)})`;
-      
+    this.ctx.moveTo(event.offsetX, event.offsetY);
+    console.log(event.offsetX, event.offsetY)
+
   }
 
-  private getOffset(canvas: HTMLElement){
-    const bound = canvas.getBoundingClientRect();
-    return {
-      top: bound.top + document.body.scrollTop,
-      left: bound.left + document.body.scrollLeft
+  @HostListener('mouseup')
+  onmouseup(){
+    this.isMouseDown = false;
+  }
+
+  @HostListener('mouseleave')
+  onmouseleave() {
+    this.isMouseDown = false;
+  }
+
+  @HostListener('mousemove', ['$event'])
+  onmousemove(event : MouseEvent){
+    if (this.isMouseDown) {
+      this.ctx.lineTo(event.offsetX, event.offsetY);
+      this.ctx.stroke();
     }
   }
 }

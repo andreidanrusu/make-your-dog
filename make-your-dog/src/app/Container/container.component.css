@@ -1,4 +1,19 @@
 .container-for-canvas{
     margin-top: 5%;
+    width: 100%;
+    height: auto;
+    text-align: center;
+    background: radial-gradient(rgb(249, 255, 226), white);
 }
 
+.dog-container {
+    margin-top: 2%;
+}
+
+.color-changer {
+    margin-top: 10%;
+}
+
+.size-changer {
+    margin-top: 5%;
+}

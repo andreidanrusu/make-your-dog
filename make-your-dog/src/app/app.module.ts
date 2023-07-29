@@ -3,7 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
+import { FormsModule } from '@angular/forms';
+import {MatSliderModule} from '@angular/material/slider';
 
 import { AppComponent } from './app.component';
 import { ContainerComponent } from './Container/container.component';
@@ -21,7 +22,9 @@ import { DrawingDirective } from './Container/drawing.directive';
     BrowserModule,
     MatMenuModule,
     MatButtonModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    FormsModule,
+    MatSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]

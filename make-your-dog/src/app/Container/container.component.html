@@ -1,3 +1,13 @@
-<div class = "container-fluid h-75 bg-white container-for-canvas">
-    <canvas appDrawing class="dog-container" [ngStyle]="{ 'width': widthValue, 'height': heightValue}"></canvas>
+<div #containerForCanvas class = "container-fluid rounded h-75 container-for-canvas justify-content-center">
+    <div class = "row justify-content-around">
+        <div class = "col-3">
+            <input class="w-100 color-changer" type="color" (input)="changeContextColor($event)">
+        </div>
+        <div class="col-4">
+            <mat-slider  discrete showTickMarks class="w-100 size-changer" min="1" max="100" step="0.5" >
+                <input value="10" matSliderThumb (input)="changeValue($event)">
+            </mat-slider>
+        </div>
+        </div>
+        <canvas appDrawing class="dog-container border rounded botder-danger bg-white"></canvas>
 </div>
