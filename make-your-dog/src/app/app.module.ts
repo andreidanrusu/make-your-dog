@@ -10,13 +10,17 @@ import { AppComponent } from './app.component';
 import { ContainerComponent } from './Container/container.component';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
 import { DrawingDirective } from './Container/drawing.directive';
+import { SaveDogComponent } from './save-dog/save-dog.component';
+import { DogFarmComponent } from './dog-farm/dog-farm.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ContainerComponent,
     NavigationBarComponent,
-    DrawingDirective
+    DrawingDirective,
+    SaveDogComponent,
+    DogFarmComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +28,7 @@ import { DrawingDirective } from './Container/drawing.directive';
     MatButtonModule,
     BrowserAnimationsModule,
     FormsModule,
-    MatSliderModule
+    MatSliderModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

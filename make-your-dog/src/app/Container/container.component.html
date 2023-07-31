@@ -8,6 +8,7 @@
                 <input value="10" matSliderThumb (input)="changeValue($event)">
             </mat-slider>
         </div>
+        <div class="col-3"><button class="btn bg-warning clear-button" (click)="clearCanvas()">Clear</button></div>
         </div>
         <canvas appDrawing class="dog-container border rounded botder-danger bg-white"></canvas>
 </div>
