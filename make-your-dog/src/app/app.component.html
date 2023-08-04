@@ -1,6 +1,18 @@
 <div class = "container w-100 h-100">
-  <app-navigation-bar class="w-100 h-25"></app-navigation-bar>
-  <app-dog-farm></app-dog-farm>
-  <app-container  (sendDogToFarmEvent)="sendDogToFarm($event)" [dogsName]="dogsName" class="w-100 h-50"></app-container>
+  <nav>
+    <div class="row h-20 justify-content-around">
+      <div class="col-3">
+          <a routerLink="/">
+              <img src="/assets/pictures/logo.png" class="w-100">
+          </a>
+      </div>
+      <div class="col-3">
+          <a routerLink="/farm">
+              Farm
+          </a>
+      </div>
+    </div>
+  </nav>
+  <router-outlet></router-outlet>
   <app-save-dog (saveDogEvent)="sendDog($event)" class="w-100 h-25"></app-save-dog>
 </div>

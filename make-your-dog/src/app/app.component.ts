@@ -1,8 +1,13 @@
 import { Component, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ContainerComponent } from './Container/container.component';
 import { DogFarmComponent } from './dog-farm/dog-farm.component';
-import { Data } from '@angular/router';
+import { Data, Routes } from '@angular/router';
 import { DogEntry } from './dog-entry';
+
+const routes : Routes = [
+  {path : '', component: ContainerComponent},
+  {path: 'farm', component: DogFarmComponent}
+]
 
 @Component({
 selector: 'app-root',
@@ -26,9 +31,11 @@ export class AppComponent {
 
   sendDog(name : string) {
     this.dogsName = name;    
+    console.log(this.canvasComponent)
     if (this.canvasComponent) {
+    console.log('in if')
+
       this.canvasComponent.saveCanvas(this.dogsName);
-      console.log("parent component saveDOg()")
     }
   }
 

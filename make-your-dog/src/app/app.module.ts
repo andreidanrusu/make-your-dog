@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import {MatSliderModule} from '@angular/material/slider';
+import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { ContainerComponent } from './Container/container.component';
@@ -12,6 +13,7 @@ import { NavigationBarComponent } from './navigation-bar/navigation-bar.componen
 import { DrawingDirective } from './Container/drawing.directive';
 import { SaveDogComponent } from './save-dog/save-dog.component';
 import { DogFarmComponent } from './dog-farm/dog-farm.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,7 @@ import { DogFarmComponent } from './dog-farm/dog-farm.component';
     NavigationBarComponent,
     DrawingDirective,
     SaveDogComponent,
-    DogFarmComponent
+    DogFarmComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,6 +31,7 @@ import { DogFarmComponent } from './dog-farm/dog-farm.component';
     BrowserAnimationsModule,
     FormsModule,
     MatSliderModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
