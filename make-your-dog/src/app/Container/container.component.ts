@@ -2,6 +2,7 @@ import { Output,EventEmitter,AfterViewChecked, AfterViewInit, Component, Element
 import { DrawingDirective } from './drawing.directive';
 import { Data } from '@angular/router';
 import { DogEntry } from '../dog-entry';
+import { DogsService } from '../services/dogs.service';
 
 @Component({
     selector: 'app-container',
@@ -14,20 +15,19 @@ import { DogEntry } from '../dog-entry';
 export class ContainerComponent implements AfterViewInit {
     
     private canvasWidth:number = 1200;
-    private canvasHeight:number = 850;
-    @Input() dogsName : string = '';
-    @Output() sendDogToFarmEvent = new EventEmitter<any>();
-    @ViewChild('canvasContainer', { static: false }) canvasContainer!: ElementRef;
+    private canvasHeight:number = 600;
+    dogName : string = '';
+
 
     private colorPicked : string = '#000000';
     private lineSize : string = '10';
-    constructor(private elementRef: ElementRef, private renderer: Renderer2){
+    constructor(private dogService : DogsService,private elementRef: ElementRef, private renderer: Renderer2){
     }
 
     ngAfterViewInit(): void {
         let ctx:CanvasRenderingContext2D = this.getContext();
-        ctx.canvas.width = 0.6 * window.innerWidth;
-        ctx.canvas.height = 0.6 * window.innerHeight;
+        ctx.canvas.width = this.canvasWidth;
+        ctx.canvas.height = this.canvasHeight;
         ctx.lineWidth = +this.lineSize;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
@@ -36,8 +36,9 @@ export class ContainerComponent implements AfterViewInit {
     @HostListener('window:resize')
     onResize() {
         let ctx : CanvasRenderingContext2D = this.getContext();
-        ctx.canvas.width = 0.6 * window.innerWidth;
-        ctx.canvas.height = 0.6 * window.innerHeight;
+        ctx.canvas.width = this.canvasWidth;
+        ctx.canvas.height = this.canvasHeight;
+        ctx.strokeStyle = this.colorPicked;
     }
 
     changeContextColor(event : Event) {
@@ -60,25 +61,26 @@ export class ContainerComponent implements AfterViewInit {
         console.log(window.innerWidth);
     }
 
-    saveCanvas(dogName : string) {
+    saveCanvas() {
         let ctx:CanvasRenderingContext2D = this.getContext();
-        console.log("saved")
         var a = document.createElement('a');
         let canvasOfDog = ctx.canvas.toDataURL("image/png");
-        window.location.href = canvasOfDog;
-        a.href =canvasOfDog;
-        a.download = dogName;
-        document.body.appendChild(a);
-        a.click();
-        let dog : DogEntry = {name : dogName, image:canvasOfDog};
-        this.sendDogToFarmEvent.emit(dog);
-        console.log(dog.image);
+        // window.location.href = canvasOfDog;
+        // a.href =canvasOfDog;
+        // a.download = this.dogName;
+        // document.body.appendChild(a);
+        // a.click();
+        this.dogService.addDog(this.dogName, canvasOfDog);
     }
 
     getContext():CanvasRenderingContext2D {
         const canvasElement = this.elementRef.nativeElement.querySelector('.dog-container');
         return canvasElement.getContext('2d');
     }
-    
-    
+
+    saveDog() {
+        if (this.dogName != '') {
+            
+        }
+    }
 }

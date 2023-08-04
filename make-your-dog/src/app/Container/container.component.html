@@ -11,4 +11,12 @@
         <div class="col-3"><button class="btn bg-warning clear-button" (click)="clearCanvas()">Clear</button></div>
     </div>
         <canvas appDrawing class="dog-container border rounded botder-danger bg-white"></canvas>
+        <div class="row justify-content-around">
+            <div class="col-3">
+                <input placeholder="Name of dog.." type="text" [(ngModel)]="dogName"> 
+            </div>
+            <div class="col-3">
+                <button class="btn bg-white w-100" (click)="saveCanvas()">Save dog</button> 
+            </div>
+        </div>
 </div>
