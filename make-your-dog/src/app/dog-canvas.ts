@@ -1,15 +1,23 @@
-export class DogCanvas {
-    private id;
+import { min } from "rxjs";
 
-    private rotation : number = 2;
+export class DogCanvas {
+    private id : number;
+
+    private movingTimeInFrame : number = 0;
+    private moving : boolean = false;
+
+    private maxDegree : number = 15;
+    private minDegree : number = 10;
+
+    private rotation : number = 0;
     private rotationIntensity : number = 4;
 
     private width : number = 200;
     private height: number = 100;
     
 
-    private xVelocity : number = 5;
-    private yVelocity : number = 5;
+    private xVelocity : number = 4; 
+    private yVelocity : number = 4;
     
 
     private maxX: number = 10;
@@ -18,7 +26,6 @@ export class DogCanvas {
 
     private xOffset: number = 0;
     private yOffset: number = 0;
-
 
 
     private ctx : CanvasRenderingContext2D;
@@ -47,19 +54,23 @@ export class DogCanvas {
     }
 
     getRandNegativeOrPositive() : number {
-        return (Math.random() * 2) - 1;
+        return Math.random() < 0.5 ? -1 : 1;
     }
 
     draw() {
-        this.ctx.save();
-        this.ctx.translate(this.xOffset, this.yOffset);
-        this.ctx.rotate(this.angleInDegrees(this.rotation));
-        if (this.rotation > 50 || this.rotation < -50) {
-            this.rotationIntensity = - this.rotationIntensity;
+        if (this.moving && (this.xVelocity > 0.1 || this.yVelocity > 0.1 || this.xVelocity < -0.1 || this.yVelocity < -0.1 )) {
+            this.ctx.save();
+            this.ctx.translate(this.xOffset, this.yOffset);
+            this.ctx.rotate(this.angleInDegrees(this.rotation));
+            if (this.rotation > this.maxDegree || this.rotation < -this.maxDegree) {
+                this.rotationIntensity = - this.rotationIntensity;
+            }
+            this.rotation += this.rotationIntensity;
+            this.ctx.drawImage(this.imgObject, -this.width / 2, -this.height / 2, this.width, this.height);
+            this.ctx.restore();
+        } else {
+            this.ctx.drawImage(this.imgObject, this.xOffset, this.yOffset, this.width, this.height);
         }
-        this.rotation += this.rotationIntensity;
-        this.ctx.drawImage(this.imgObject, 0, 0, this.width, this.height);
-        this.ctx.restore();
     }
 
     convertDataURLToImg() {
@@ -87,8 +98,7 @@ export class DogCanvas {
             this.yVelocity = -this.yVelocity;
         }
 
-        this.xOffset += this.xVelocity;
-        this.yOffset += this.yVelocity;
+        this.move();
 
 
     }
@@ -105,4 +115,38 @@ export class DogCanvas {
     angleInDegrees(degrees : number) : number {
         return (degrees * Math.PI) / 180;
     }
+
+    getRandomInRange(min : number, max : number) : number {
+        return Math.random() * (max - min + 1) + min;
+    }
+
+
+    sqewAngle() : number {
+        return Math.random()*(this.maxDegree - this.minDegree + 1) + this.minDegree;
+    }
+
+    move() {
+        if (this.moving) {
+            if (this.movingTimeInFrame < 1) {
+                this.moving = false;
+                this.xOffset -= this.width / 2;
+                this.yOffset -= this.height / 2;
+                this.xVelocity = this.getRandNegativeOrPositive() * this.getRandomInRange(0, 4);
+                this.yVelocity = this.getRandNegativeOrPositive() * this.getRandomInRange(0, 4);
+                
+                this.rotationIntensity = Math.max(((Math.abs(this.xVelocity) + Math.abs(this.yVelocity)) / 2), 2);
+                console.log(this.rotationIntensity);
+            } else {
+                this.xOffset += this.xVelocity;
+                this.yOffset += this.yVelocity;
+                this.movingTimeInFrame -= 1;
+            }
+        } else if (Math.random() > 0.99) {
+            this.xOffset += this.width / 2;
+            this.yOffset += this.height / 2;
+            this.moving = true;
+            this.movingTimeInFrame = this.getRandomInRange(4, 2) * 60;
+        }
+    }
+
  }
