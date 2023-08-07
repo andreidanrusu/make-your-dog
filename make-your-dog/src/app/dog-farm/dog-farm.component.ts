@@ -18,6 +18,7 @@ export class DogFarmComponent implements AfterViewInit{
   constructor(private ngZone : NgZone,private dogService : DogsService,private elementRef: ElementRef, private renderer: Renderer2) {
     
   }
+
   ngAfterViewInit(): void {
     this.CanvasElem = this.elementRef.nativeElement.querySelector('.dog-farm-canvas');
     if (this.CanvasElem){
@@ -25,9 +26,10 @@ export class DogFarmComponent implements AfterViewInit{
       this.CanvasElem.width = 0.8 * window.innerWidth;
       this.CanvasElem.height = 0.8 * window.innerHeight;
       for (let i = 0; i < this.dogService.dogs.length; i++) {
-        this.dogPics.push(new DogCanvas(this.CanvasElem.width, this.CanvasElem.height, 500, 500,
+        this.dogPics.push(new DogCanvas(this.dogService.dogs[i].id ,this.CanvasElem.width, this.CanvasElem.height, Math.floor(Math.random() * 201 + 200), Math.floor(Math.random() * 201 + 200),
           this.ctx, this.dogService.dogs[i].image));
       }
+
     }
     this.animate();
   }
@@ -37,6 +39,9 @@ export class DogFarmComponent implements AfterViewInit{
     if (this.CanvasElem) {
       this.CanvasElem.width = 0.8 * window.innerWidth;
       this.CanvasElem.height = 0.8 * window.innerHeight;
+      this.dogPics.forEach(dog => {
+        dog.changeCanvasSize(0.8 * window.innerHeight, 0.8 * window.innerWidth);
+      })
     }
   }
 
@@ -46,16 +51,32 @@ export class DogFarmComponent implements AfterViewInit{
       const animationStep = (timestamp : number) => {
         const elapsed = timestamp - start;
         if (elapsed < 500000) {
+          this.ctx.clearRect(0,0, this.CanvasElem?.width, this.CanvasElem?.width);
+          this.updateDogPics();
           this.dogPics.forEach(dog => {
-            this.ctx.clearRect(0,0, this.CanvasElem?.width, this.CanvasElem?.width);
             dog.update();
-            console.log('a')
           })
           requestAnimationFrame(animationStep);
         }
       };
       requestAnimationFrame(animationStep);
     });
+  }
+
+  updateDogPics() {
+    if (this.dogService.dogs.length > this.dogPics.length) {
+      for (let i = 0; i < this.dogService.dogs.length; i ++) {  
+          for (let j = 0; j < this.dogService.dogs.length; j ++) {
+            if (this.dogPics[i].getId() === this.dogService.dogs[j].id) {
+              break;
+            }
+            if (this.CanvasElem) {
+            this.dogPics.push(new DogCanvas(this.dogService.dogs[i].id ,this.CanvasElem.width, this.CanvasElem.height, Math.floor(Math.random() * 201 + 200), Math.floor(Math.random() * 201 + 200),
+            this.ctx, this.dogService.dogs[i].image));
+          }
+          }
+      }
+    }
   }
   
   

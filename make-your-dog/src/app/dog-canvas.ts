@@ -1,10 +1,15 @@
 export class DogCanvas {
+    private id;
+
+    private rotation : number = 2;
+    private rotationIntensity : number = 4;
+
     private width : number = 200;
     private height: number = 100;
     
 
-    private xVelocity : number = 4;
-    private yVelocity : number = 4;
+    private xVelocity : number = 5;
+    private yVelocity : number = 5;
     
 
     private maxX: number = 10;
@@ -20,18 +25,41 @@ export class DogCanvas {
     private imageURL : string;
     private imgObject = new Image();
 
-    constructor(maxX : number, maxY : number, initialX : number, initialY : number, ctx:CanvasRenderingContext2D, image : string) {
+    constructor(id : number,maxX : number, maxY : number, initialX : number, initialY : number, ctx:CanvasRenderingContext2D, image : string) {
+        this.id = id;
+
+        this.xVelocity = this.getRandNegativeOrPositive() * this.xVelocity;
+        this.yVelocity = this.getRandNegativeOrPositive() * this.yVelocity;
+
+
         this.xOffset = initialX;
         this.yOffset = initialY;
+
+
         this.maxX = maxX;
         this.maxY = maxY;
+
+
         this.ctx = ctx;
+
         this.imageURL = image;
         this.convertDataURLToImg();
     }
 
+    getRandNegativeOrPositive() : number {
+        return (Math.random() * 2) - 1;
+    }
+
     draw() {
-        this.ctx.drawImage(this.imgObject, this.xOffset, this.yOffset, this.width, this.height);
+        this.ctx.save();
+        this.ctx.translate(this.xOffset, this.yOffset);
+        this.ctx.rotate(this.angleInDegrees(this.rotation));
+        if (this.rotation > 50 || this.rotation < -50) {
+            this.rotationIntensity = - this.rotationIntensity;
+        }
+        this.rotation += this.rotationIntensity;
+        this.ctx.drawImage(this.imgObject, 0, 0, this.width, this.height);
+        this.ctx.restore();
     }
 
     convertDataURLToImg() {
@@ -48,19 +76,33 @@ export class DogCanvas {
     }
 
     update() {
+        this.draw();
+
         if (this.xOffset < this.width || this.xOffset > this.maxX - this.width) {
             this.xVelocity = -this.xVelocity;
         }
+
 
         if (this.yOffset < this.height || this.yOffset > this.maxY - this.height) {
             this.yVelocity = -this.yVelocity;
         }
 
-        console.log(this.xOffset);
         this.xOffset += this.xVelocity;
         this.yOffset += this.yVelocity;
 
-        this.draw();
 
     }
-}
+
+    getId() : number {
+        return this.id;
+    }
+
+    changeCanvasSize(newHeight: number, newWidth : number) {
+        this.maxX = newWidth;
+        this.maxY = newHeight;
+    } 
+
+    angleInDegrees(degrees : number) : number {
+        return (degrees * Math.PI) / 180;
+    }
+ }

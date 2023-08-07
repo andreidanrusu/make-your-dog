@@ -65,6 +65,7 @@ export class ContainerComponent implements AfterViewInit {
         let ctx:CanvasRenderingContext2D = this.getContext();
         var a = document.createElement('a');
         let canvasOfDog = ctx.canvas.toDataURL("image/png");
+        console.log(canvasOfDog);
         // window.location.href = canvasOfDog;
         // a.href =canvasOfDog;
         // a.download = this.dogName;
