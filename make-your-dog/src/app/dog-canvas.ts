@@ -135,6 +135,7 @@ export class DogCanvas {
                 this.yVelocity = this.getRandNegativeOrPositive() * this.getRandomInRange(0, 4);
                 
                 this.rotationIntensity = Math.max(((Math.abs(this.xVelocity) + Math.abs(this.yVelocity)) / 2), 2);
+                this.rotation = 0;
                 console.log(this.rotationIntensity);
             } else {
                 this.xOffset += this.xVelocity;
