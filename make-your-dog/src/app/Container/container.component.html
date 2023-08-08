@@ -1,22 +1,22 @@
 <div #containerForCanvas class = "container-fluid rounded h-75 container-for-canvas justify-content-center">
     <div class = "row justify-content-around">
-        <div class = "col-3">
+        <div class = "col-2">
             <input class="w-100 color-changer" type="color" (input)="changeContextColor($event)">
         </div>
-        <div class="col-4">
+        <div class="col-3">
             <mat-slider  discrete showTickMarks class="w-100 size-changer" min="1" max="100" step="0.5" >
                 <input value="10" matSliderThumb (input)="changeValue($event)">
             </mat-slider>
         </div>
-        <div class="col-3"><button class="btn bg-warning clear-button" (click)="clearCanvas()">Clear</button></div>
+        <div class="col-2"><button class="btn bg-warning clear-button" (click)="clearCanvas()">Clear</button></div>
     </div>
-        <canvas appDrawing class="dog-container border rounded botder-danger bg-white"></canvas>
-        <div class="row justify-content-around">
-            <div class="col-3">
-                <input placeholder="Name of dog.." type="text" [(ngModel)]="dogName"> 
-            </div>
-            <div class="col-3">
-                <button class="btn bg-white w-100" (click)="saveCanvas()">Save dog</button> 
-            </div>
+    <canvas appDrawing class="dog-container border rounded botder-danger bg-white"></canvas>
+    <div class="row justify-content-around">
+        <div class="col-3">
+            <input placeholder="Name of dog.." type="text" [(ngModel)]="dogName"> 
         </div>
+        <div class="col-3">
+            <button class="btn bg-white w-100" (click)="saveCanvas()">Save dog</button> 
+        </div>
+    </div>
 </div>

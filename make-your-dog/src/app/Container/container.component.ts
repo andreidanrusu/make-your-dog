@@ -14,8 +14,8 @@ import { DogsService } from '../services/dogs.service';
 
 export class ContainerComponent implements AfterViewInit {
     
-    private canvasWidth:number = 1200;
-    private canvasHeight:number = 600;
+    private canvasWidth:number = window.innerWidth * 0.7;
+    private canvasHeight:number = window.innerHeight * 0.6;
     dogName : string = '';
 
 
@@ -36,9 +36,11 @@ export class ContainerComponent implements AfterViewInit {
     @HostListener('window:resize')
     onResize() {
         let ctx : CanvasRenderingContext2D = this.getContext();
-        ctx.canvas.width = this.canvasWidth;
-        ctx.canvas.height = this.canvasHeight;
+        ctx.canvas.width = window.innerWidth * 0.7;
+        ctx.canvas.height = window.innerHeight * 0.6;
         ctx.strokeStyle = this.colorPicked;
+        ctx.lineWidth = +this.lineSize;
+
     }
 
     changeContextColor(event : Event) {

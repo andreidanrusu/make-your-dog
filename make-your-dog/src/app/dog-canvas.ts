@@ -1,4 +1,5 @@
 import { min } from "rxjs";
+import { DogsService } from "./services/dogs.service";
 
 export class DogCanvas {
     private id : number;
@@ -26,6 +27,8 @@ export class DogCanvas {
 
     private xOffset: number = 0;
     private yOffset: number = 0;
+
+    private isSelected : boolean = false;
 
 
     private ctx : CanvasRenderingContext2D;
@@ -58,7 +61,7 @@ export class DogCanvas {
     }
 
     draw() {
-        if (this.moving && (this.xVelocity > 0.1 || this.yVelocity > 0.1 || this.xVelocity < -0.1 || this.yVelocity < -0.1 )) {
+        if (this.moving) {
             this.ctx.save();
             this.ctx.translate(this.xOffset, this.yOffset);
             this.ctx.rotate(this.angleInDegrees(this.rotation));
@@ -89,6 +92,43 @@ export class DogCanvas {
     update() {
         this.draw();
 
+        this.reverseDirection();
+
+        if (this.isSelected){
+            this.moving = false;
+        } else {
+            this.move();
+        }
+    }
+
+    getSize() : {width : number, height : number} {
+        return {width : this.width, height : this.height}
+    }
+
+    getCoordonates() : {x : number, y : number} {
+        return {
+            x : this.xOffset,
+            y : this.yOffset 
+        }
+    }
+
+
+    selectDog() {
+        if (this.isSelected === false) {
+            this.isSelected = true;
+            if (this.moving) {
+                
+            } 
+        }
+    }
+
+    deselectDog() {
+        this.isSelected = false;
+
+    }
+
+
+    reverseDirection() {
         if (this.xOffset < this.width || this.xOffset > this.maxX - this.width) {
             this.xVelocity = -this.xVelocity;
         }
@@ -97,10 +137,6 @@ export class DogCanvas {
         if (this.yOffset < this.height || this.yOffset > this.maxY - this.height) {
             this.yVelocity = -this.yVelocity;
         }
-
-        this.move();
-
-
     }
 
     getId() : number {
@@ -142,7 +178,7 @@ export class DogCanvas {
                 this.yOffset += this.yVelocity;
                 this.movingTimeInFrame -= 1;
             }
-        } else if (Math.random() > 0.99) {
+        } else if (Math.random() > 0.99 && this.isSelected === false) {
             this.xOffset += this.width / 2;
             this.yOffset += this.height / 2;
             this.moving = true;

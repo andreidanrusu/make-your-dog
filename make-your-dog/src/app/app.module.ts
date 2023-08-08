@@ -13,6 +13,7 @@ import { NavigationBarComponent } from './navigation-bar/navigation-bar.componen
 import { DrawingDirective } from './Container/drawing.directive';
 import { DogFarmComponent } from './dog-farm/dog-farm.component';
 import { AppRoutingModule } from './app-routing.module';
+import { MouseInteractionsDirective } from './dog-farm/mouse-interactions.directive';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { AppRoutingModule } from './app-routing.module';
     NavigationBarComponent,
     DrawingDirective,
     DogFarmComponent,
+    MouseInteractionsDirective,
   ],
   imports: [
     BrowserModule,

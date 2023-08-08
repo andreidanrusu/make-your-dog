@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, Renderer2, HostListener, NgZone } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, Renderer2, HostListener, NgZone, Host } from '@angular/core';
 import { DogEntry } from '../dog-entry';
 import { animate, animation, state, style, transition, trigger } from '@angular/animations';
 import { DogsService } from '../services/dogs.service';
@@ -14,6 +14,7 @@ export class DogFarmComponent implements AfterViewInit{
   private CanvasElem? : HTMLCanvasElement;
   private ctx : CanvasRenderingContext2D | any;
   private dogPics : DogCanvas[] = [];
+  private mouseOnCanvas : boolean = false;
 
   constructor(private ngZone : NgZone,private dogService : DogsService,private elementRef: ElementRef, private renderer: Renderer2) {
     
@@ -45,6 +46,10 @@ export class DogFarmComponent implements AfterViewInit{
     }
   }
 
+ 
+
+
+
   animate() {
     this.ngZone.runOutsideAngular (() => {
       const start :number = performance.now();
@@ -54,6 +59,7 @@ export class DogFarmComponent implements AfterViewInit{
           this.ctx.clearRect(0,0, this.CanvasElem?.width, this.CanvasElem?.width);
           this.updateDogPics();
           this.dogPics.forEach(dog => {
+            this.checkIfMouseOnDog(dog);
             dog.update();
           })
           requestAnimationFrame(animationStep);
@@ -61,6 +67,18 @@ export class DogFarmComponent implements AfterViewInit{
       };
       requestAnimationFrame(animationStep);
     });
+  }
+
+  checkIfMouseOnDog(dog : DogCanvas) {
+      let mouseCoordonates = this.dogService.getMouseCoordonates();
+      let dogCoodonates = dog.getCoordonates();
+      let dogSize = dog.getSize();
+      if (mouseCoordonates.x > dogCoodonates.x && mouseCoordonates.x < dogCoodonates.x + dogSize.width
+        && mouseCoordonates.y > dogCoodonates.y && mouseCoordonates.y < dogCoodonates.y + dogSize.height) {
+          dog.selectDog();
+        } else {
+          dog.deselectDog();
+        }
   }
 
   updateDogPics() {
