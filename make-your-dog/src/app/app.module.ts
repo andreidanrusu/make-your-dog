@@ -6,6 +6,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import {MatSliderModule} from '@angular/material/slider';
 import { Routes, RouterModule } from '@angular/router';
+import {MatListModule} from '@angular/material/list';
 
 import { AppComponent } from './app.component';
 import { ContainerComponent } from './Container/container.component';
@@ -13,7 +14,8 @@ import { NavigationBarComponent } from './navigation-bar/navigation-bar.componen
 import { DrawingDirective } from './Container/drawing.directive';
 import { DogFarmComponent } from './dog-farm/dog-farm.component';
 import { AppRoutingModule } from './app-routing.module';
-import { MouseInteractionsDirective } from './dog-farm/mouse-interactions.directive';
+import { MouseInteractionsDirective } from './dog-farm/directives/mouse-interactions.directive';
+import { ListItemDirective } from './dog-farm/directives/list-item.directive';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { MouseInteractionsDirective } from './dog-farm/mouse-interactions.direct
     DrawingDirective,
     DogFarmComponent,
     MouseInteractionsDirective,
+    ListItemDirective,
   ],
   imports: [
     BrowserModule,
@@ -31,7 +34,8 @@ import { MouseInteractionsDirective } from './dog-farm/mouse-interactions.direct
     BrowserAnimationsModule,
     FormsModule,
     MatSliderModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

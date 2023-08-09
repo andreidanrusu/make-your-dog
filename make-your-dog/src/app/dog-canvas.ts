@@ -72,6 +72,9 @@ export class DogCanvas {
             this.ctx.drawImage(this.imgObject, -this.width / 2, -this.height / 2, this.width, this.height);
             this.ctx.restore();
         } else {
+            if (this.isSelected) {
+                this.ctx.strokeRect(this.xOffset, this.yOffset, this.width, this.height);
+            }
             this.ctx.drawImage(this.imgObject, this.xOffset, this.yOffset, this.width, this.height);
         }
     }
@@ -90,15 +93,16 @@ export class DogCanvas {
     }
 
     update() {
-        this.draw();
-
-        this.reverseDirection();
-
         if (this.isSelected){
             this.moving = false;
         } else {
             this.move();
         }
+        this.reverseDirection();
+        this.draw();
+
+
+        
     }
 
     getSize() : {width : number, height : number} {
@@ -106,9 +110,16 @@ export class DogCanvas {
     }
 
     getCoordonates() : {x : number, y : number} {
-        return {
-            x : this.xOffset,
-            y : this.yOffset 
+        if (this.moving) {
+            return {
+                x : this.xOffset - this.width / 2,
+                y : this.yOffset - this.height / 2
+            }
+        } else {
+            return {
+                x : this.xOffset,
+                y : this.yOffset
+            }
         }
     }
 
@@ -117,7 +128,8 @@ export class DogCanvas {
         if (this.isSelected === false) {
             this.isSelected = true;
             if (this.moving) {
-                
+                this.xOffset -= this.width/2;
+                this.yOffset -= this.height/2;
             } 
         }
     }
@@ -172,7 +184,6 @@ export class DogCanvas {
                 
                 this.rotationIntensity = Math.max(((Math.abs(this.xVelocity) + Math.abs(this.yVelocity)) / 2), 2);
                 this.rotation = 0;
-                console.log(this.rotationIntensity);
             } else {
                 this.xOffset += this.xVelocity;
                 this.yOffset += this.yVelocity;
@@ -185,5 +196,4 @@ export class DogCanvas {
             this.movingTimeInFrame = this.getRandomInRange(4, 2) * 60;
         }
     }
-
  }

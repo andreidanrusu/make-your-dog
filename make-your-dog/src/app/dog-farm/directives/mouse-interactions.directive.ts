@@ -1,5 +1,5 @@
 import { Directive, HostListener } from '@angular/core';
-import { DogsService } from '../services/dogs.service';
+import { DogsService } from '../../services/dogs.service';
 
 @Directive({
   selector: '[appMouseInteractions]'
