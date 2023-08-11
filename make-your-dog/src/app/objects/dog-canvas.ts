@@ -1,5 +1,5 @@
 import { min } from "rxjs";
-import { DogsService } from "./services/dogs.service";
+import { DogsService } from "../services/dogs.service";
 
 export class DogCanvas {
     private id : number;

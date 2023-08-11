@@ -1,4 +1,4 @@
-import { DogCanvas } from "../dog-canvas";
+import { DogCanvas } from "../objects/dog-canvas";
 import { DogEntry } from "../dog-entry";
 import { saveAs } from "file-saver";
 
@@ -58,10 +58,15 @@ export class DogsService {
     this.selectedDogID = -1;
   }
  
-  toggleSelectFromList() {
-    this.selectedFromList === false ? this.selectedFromList = true :
+  selectFromList() {
+    this.selectedFromList = true;
+    console.log(this.selectedFromList);
+  }
+
+  unselectFromList() {
     this.selectedFromList = false;
     console.log(this.selectedFromList);
+
   }
 
   isSelectedFromList() : boolean {

@@ -3,9 +3,10 @@
         <div class="col-10">
             <canvas appMouseInteractions class="dog-farm-canvas"></canvas>
         </div>
-        <div class = "col-2">
+        <div class = "col-2 mt-5">
+            <input type="text" class= "form-control rounded mb-2" placeholder="Search dog.." [(ngModel)]="searchText" (input)="onKeyPressEvent()">
             <ul class="list-group">
-                <li appListItem class= "list-group-item" *ngFor="let dog of getDogsFromService()" [dogId]="dog.id">
+                <li appListItem class= "list-group-item" *ngFor="let dog of filteredList" (mouseenter) = "onMouseEnter(dog.id)" (mouseleave) = "onMouseLeave()">
                     {{dog.name}}
                 </li>
             </ul>

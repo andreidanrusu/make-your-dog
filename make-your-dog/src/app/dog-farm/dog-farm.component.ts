@@ -2,9 +2,10 @@ import { Component, AfterViewInit, ElementRef, Renderer2, HostListener, NgZone, 
 import { DogEntry } from '../dog-entry';
 import { animate, animation, state, style, transition, trigger } from '@angular/animations';
 import { DogsService } from '../services/dogs.service';
-import { DogCanvas } from '../dog-canvas';
+import { DogCanvas } from '../objects/dog-canvas';
 import { Subscription, timestamp } from 'rxjs';
 import { Router } from '@angular/router';
+import { GrassBlade } from '../objects/grass-blade';
 
 @Component({
   selector: 'app-dog-farm',
@@ -17,12 +18,21 @@ export class DogFarmComponent implements AfterViewInit, OnDestroy{
   private dogPics : DogCanvas[] = [];
   private mouseOnCanvas : boolean = false;
   private routerSubscription : Subscription;
+  private grassBlades : GrassBlade[] = [];
+  searchText : string = "";
+  filteredList : DogEntry[];
 
   constructor(private ngZone : NgZone,private dogService : DogsService,private elementRef: ElementRef, private renderer: Renderer2,
     private router : Router) {
+    this.filteredList = this.getDogsFromService();
     this.routerSubscription = this.router.events.subscribe((event) => {
     this.dogService.removeSelectedDogId();
     })
+  }
+
+  onKeyPressEvent() {
+    this.filteredList = this.getDogsFromService().filter((dog) => dog.name.toLowerCase().includes(this.searchText));
+    console.log(this.filteredList);
   }
 
   ngOnDestroy(): void {
@@ -39,9 +49,13 @@ export class DogFarmComponent implements AfterViewInit, OnDestroy{
         this.dogPics.push(new DogCanvas(this.dogService.dogs[i].id ,this.CanvasElem.width, this.CanvasElem.height, Math.floor(Math.random() * 201 + 200), Math.floor(Math.random() * 201 + 200),
           this.ctx, this.dogService.dogs[i].image));
       }
+      // this.grassBlades.push(new GrassBlade(100, 100, this.ctx));
 
     }
     this.animate();
+  }
+
+  createBlades() {
   }
 
   @HostListener('window:resie')
@@ -71,6 +85,9 @@ export class DogFarmComponent implements AfterViewInit, OnDestroy{
             this.checkIfMouseOnDog(dog);
             dog.update();
           })
+          this.grassBlades.forEach(blade => {
+            blade.draw();
+          })
           requestAnimationFrame(animationStep);
         }
       };
@@ -85,6 +102,8 @@ export class DogFarmComponent implements AfterViewInit, OnDestroy{
       if (this.dogService.isSelectedFromList()) {
         if (this.dogService.getSelectedDogId() === dog.getId()) {
           dog.selectDog();
+        } else {
+          dog.deselectDog();
         }
       } else {
         if (mouseCoordonates.x > dogCoodonates.x && mouseCoordonates.x < dogCoodonates.x + dogSize.width
@@ -119,6 +138,17 @@ export class DogFarmComponent implements AfterViewInit, OnDestroy{
           }
       }
     }
+  }
+
+  onMouseEnter(dogId : number) {
+    this.dogService.setSelectedDogId(dogId);
+    this.dogService.selectFromList();
+  }
+
+  onMouseLeave() {
+    this.dogService.unselectFromList();
+    this.dogService.removeSelectedDogId();
+    console.log('mouseleft')
   }
 
   getDogsFromService() {

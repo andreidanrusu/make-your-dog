@@ -14,10 +14,8 @@ export class ListItemDirective implements AfterViewInit{
     this.dogName = this.element.nativeElement.innerText;
   }
 
-  @HostListener('mousedown')
-  onMouseDown() {
-    this.dogService.setSelectedDogId(this.dogId);
-    this.dogService.toggleSelectFromList();
-  }
+
+
+
 
 }
