@@ -69,28 +69,41 @@ export class DogFarmComponent implements AfterViewInit, OnDestroy{
     }
   }
 
- 
+
 
 
 
   animate() {
-    this.ngZone.runOutsideAngular (() => {
-      const start :number = performance.now();
-      const animationStep = (timestamp : number) => {
-        const elapsed = timestamp - start;
-        if (elapsed < 500000) {
-          this.ctx.clearRect(0,0, this.CanvasElem?.width, this.CanvasElem?.height);
+    this.ngZone.runOutsideAngular(() => {
+      const FPS = 60;
+      const FRAME_DURATION = 1000 / FPS;
+      let lastFrameTime = performance.now();
+      let accumulator = 0;
+
+      const animationStep = (timestamp: number) => {
+        const delta = timestamp - lastFrameTime;
+        lastFrameTime = timestamp;
+        accumulator += delta;
+
+        while (accumulator >= FRAME_DURATION) {
+          this.ctx.clearRect(0, 0, this.CanvasElem?.width, this.CanvasElem?.height);
           this.updateDogPics();
+
           this.dogPics.forEach(dog => {
             this.checkIfMouseOnDog(dog);
             dog.update();
-          })
+          });
+
           this.grassBlades.forEach(blade => {
             blade.draw();
-          })
-          requestAnimationFrame(animationStep);
+          });
+
+          accumulator -= FRAME_DURATION;
         }
+
+        requestAnimationFrame(animationStep);
       };
+
       requestAnimationFrame(animationStep);
     });
   }
@@ -126,7 +139,7 @@ export class DogFarmComponent implements AfterViewInit, OnDestroy{
 
   updateDogPics() {
     if (this.dogService.dogs.length > this.dogPics.length) {
-      for (let i = 0; i < this.dogService.dogs.length; i ++) {  
+      for (let i = 0; i < this.dogService.dogs.length; i ++) {
           for (let j = 0; j < this.dogService.dogs.length; j ++) {
             if (this.dogPics[i].getId() === this.dogService.dogs[j].id) {
               break;
@@ -154,6 +167,6 @@ export class DogFarmComponent implements AfterViewInit, OnDestroy{
   getDogsFromService() {
     return this.dogService.dogs;
   }
-  
-  
+
+
 }
